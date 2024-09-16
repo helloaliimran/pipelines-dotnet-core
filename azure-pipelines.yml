@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: "IMRAN-ALI"   
+  name: "local self hosted agent"   
 
 steps:
 - script: echo replace with version
