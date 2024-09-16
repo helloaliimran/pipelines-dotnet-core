@@ -49,5 +49,23 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\inetpub\wwwroot\PipeLineAgent" 
+      # Define paths
+      $sourcePath = "$(Build.ArtifactStagingDirectory)\*"  # Source directory
+      $destinationFolder = "C:\inetpub\wwwroot\PipeLineAgent"
 
+      # Copy the zip file to the destination folder
+      Copy-Item -Path $sourcePath -Destination $destinationFolder -Recurse -Force
+      
+
+      # Unzip the file in the destination folder
+      # Assuming there is only one zip file in the source path
+
+      $zipFile = Get-ChildItem -Path $destinationFolder -Filter *.zip | Select-Object -First 1
+      if ($zipFile -ne $null) {
+          $zipFilePath = $zipFile.FullName
+          Expand-Archive -Path $zipFilePath -DestinationPath $destinationFolder -Force
+          Remove-Item -Path $zipFilePath -Force  # Optionally remove the zip file after extraction
+      } else {
+          Write-Host "No zip file found to unzip."
+      }
+  displayName: 'Copy and Unzip File'
