@@ -53,6 +53,10 @@ steps:
       $sourcePath = "$(Build.ArtifactStagingDirectory)\*"  # Source directory
       $destinationFolder = "C:\inetpub\wwwroot\PipeLineAgent"
 
+      # Stop IIS
+      Write-Host "Stopping IIS..."
+      Stop-Service -Name W3SVC -Force
+
       # Copy the zip file to the destination folder
       Copy-Item -Path $sourcePath -Destination $destinationFolder -Recurse -Force
       
@@ -68,4 +72,11 @@ steps:
       } else {
           Write-Host "No zip file found to unzip."
       }
+
+      # Start IIS
+      Write-Host "Starting IIS..."
+      Start-Service -Name W3SVC
+
+      Write-Host "Deployment completed successfully."
+
   displayName: 'Copy and Unzip File'
