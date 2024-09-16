@@ -49,6 +49,5 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\inetpub\wwwroot\PipeLineAgent" -Recurse
-      iisreset  # Restart IIS (optional)
+      Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\inetpub\wwwroot\PipeLineAgent" 
 
