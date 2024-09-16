@@ -43,3 +43,11 @@ steps:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Publish the build artifacts
     artifactName: 'drop'
     publishLocation: 'Container'
+
+# Deploy the build to IIS using PowerShell or direct file copy since the agent is in the local network
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\inetpub\wwwroot\PipeLineAgent" -Recurse
+      iisreset  # Restart IIS (optional)
