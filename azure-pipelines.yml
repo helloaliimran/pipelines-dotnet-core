@@ -8,18 +8,41 @@ trigger:
 
 pool:
   name: "Default"   
- 
 
 steps:
-# Checkout the code
-- task: Checkout@1
+- script: echo replace with version
+  displayName: 'Run a one-line script'
 
-# Build the ASP.NET Core project
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.131'  # Replace with the version of .NET you're using
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script:  echo restore nuget packages
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'  # This will restore NuGet packages
+
+- script: echo build solution
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'  # Build the solution
+
+- script: echo publish
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     projects: '**/*.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'  # Publish the project
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Publish the build artifacts
+    artifactName: 'drop'
+    publishLocation: 'Container'
 
 # Deploy the build to IIS using PowerShell or direct file copy since the agent is in the local network
 - task: PowerShell@2
@@ -28,3 +51,4 @@ steps:
     script: |
       Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\inetpub\wwwroot\PipeLineAgent" -Recurse
       iisreset  # Restart IIS (optional)
+
