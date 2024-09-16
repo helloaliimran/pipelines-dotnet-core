@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: replace with version
+- script: echo replace with version
   displayName: 'Run a one-line script'
 
 - task: UseDotNet@2
@@ -19,19 +19,19 @@ steps:
     version: '6.x.x'  # Replace with the version of .NET you're using
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- script: restore nuget packages
+- script:  echo restore nuget packages
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
     projects: '**/*.csproj'  # This will restore NuGet packages
 
-- script: build solution
+- script: echo build solution
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: '**/*.csproj'  # Build the solution
 
-- script: publish project 
+- script: echo publish
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
