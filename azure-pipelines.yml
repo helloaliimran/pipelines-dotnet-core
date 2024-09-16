@@ -13,7 +13,27 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.x.x'  # Replace with the version of .NET you're using
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'  # This will restore NuGet packages
+
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'  # Build the solution
+
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'  # Publish the project
