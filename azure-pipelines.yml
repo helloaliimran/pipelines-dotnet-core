@@ -54,8 +54,7 @@ steps:
       $destinationFolder = "C:\inetpub\wwwroot\PipeLineAgent"
 
       # Stop IIS
-      Write-Host "Stopping IIS..."
-      Stop-Service -Name W3SVC -Force
+      Stop-WebAppPool -Name "pipeline"
 
       # Copy the zip file to the destination folder
       Copy-Item -Path $sourcePath -Destination $destinationFolder -Recurse -Force
@@ -74,8 +73,8 @@ steps:
       }
 
       # Start IIS
-      Write-Host "Starting IIS..."
-      Start-Service -Name W3SVC
+      # Stop IIS
+      Start-WebAppPool -Name "pipeline"
 
       Write-Host "Deployment completed successfully."
 
