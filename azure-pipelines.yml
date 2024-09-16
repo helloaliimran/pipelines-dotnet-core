@@ -53,8 +53,7 @@ steps:
       $sourcePath = "$(Build.ArtifactStagingDirectory)\*"  # Source directory
       $destinationFolder = "C:\inetpub\wwwroot\PipeLineAgent"
 
-      # Stop IIS
-      Stop-WebAppPool -Name "pipeline"
+ 
 
       # Copy the zip file to the destination folder
       Copy-Item -Path $sourcePath -Destination $destinationFolder -Recurse -Force
@@ -72,9 +71,6 @@ steps:
           Write-Host "No zip file found to unzip."
       }
 
-      # Start IIS
-      # Stop IIS
-      Start-WebAppPool -Name "pipeline"
 
       Write-Host "Deployment completed successfully."
 
