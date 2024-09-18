@@ -10,6 +10,16 @@ pool:
   name: "Default"   
 
 steps:
+- script: echo replace with version
+  displayName: 'Run a one-line script'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.131'  # Replace with the version of .NET you're using
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+
 
 - task: DotNetCoreCLI@2
   inputs:
